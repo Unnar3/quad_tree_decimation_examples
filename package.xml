@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<package>
+    <name>quad_tree_decimation_example</name>
+    <version>0.0.0</version>
+    <description>compression library</description>
+    <maintainer email="unnar@kth.se">unnar</maintainer>
+    <license>BSD</license>
+    <buildtool_depend>catkin</buildtool_depend>
+    <build_depend>roscpp</build_depend>
+    <run_depend>roscpp</run_depend>
+    <build_depend>pcl_conversions</build_depend>
+    <run_depend>pcl_conversions</run_depend>
+    <run_depend>pcl_ros</run_depend>
+    <build_depend>pcl_ros</build_depend>
+    <build_depend>message_generation</build_depend>
+    <run_depend>message_runtime</run_depend>
+    <build_depend>std_msgs</build_depend>
+
+    <build_depend>quad_tree_decimation</build_depend>
+    <run_depend>quad_tree_decimation</run_depend>
+
+    <build_depend>qt_build</build_depend>
+    <run_depend>qt_build</run_depend>
+
+    <build_depend>libqt4-dev</build_depend>
+    <run_depend>libqt4-dev</run_depend>
+
+    <build_depend>metaroom_xml_parser</build_depend>
+    <run_depend>metaroom_xml_parser</run_depend>
+
+    <build_depend>exx_compression</build_depend>
+    <run_depend>exx_compression</run_depend>
+
+</package>
