@@ -4,12 +4,14 @@
 #include <quad_tree_decimation/quad_tree/quad_tree.h>
 #include <quad_tree_decimation/utils/utils.h>
 #include <exx_compression/compression.h>
+#include <pcl/kdtree/kdtree_flann.h>
 // #include <exx_compression/planes.h>
 #include <metaroom_xml_parser/simple_xml_parser.h>
 // #include <PointTypes/surfel_type.h>
 // #include <pcl/visualization/pcl_visualizer.h>
 // PCL specific includes
 #include <pcl_conversions/pcl_conversions.h>
+#include <pcl/sample_consensus/sac_model_plane.h>
 
 #include <fstream>
 #include <iostream>
@@ -86,6 +88,7 @@ public:
         std::string txt_name = test_cloud_name.substr(0,test_cloud_name.find_last_of(".")) + ".txt";
 
         std::vector <std::vector <int> > data;
+        std::vector <float > data_f;
         std::ifstream infile( test_cloud + txt_name );
         while (infile)
         {
@@ -94,11 +97,16 @@ public:
 
             std::istringstream ss( s );
             std::vector <int> record;
+            int count = 0;
             while (ss)
             {
                 std::string s;
-                if (!getline( ss, s, ',' )) break;
-                record.push_back( std::stoi(s) );
+                if (!getline( ss, s, ';' )) break;
+                if(count < 6){
+                    record.push_back( std::stoi(s) );
+                }
+                else
+                    data_f.push_back( std::stof(s) );
             }
 
             data.push_back( record );
@@ -119,9 +127,13 @@ public:
 
         std::cout << "segment: " << segment->points.size() << std::endl;
 
-
         std::vector<PointCloudT::Ptr> plane_vec;
         std::vector<Eigen::Vector4d> normal_vec;
+
+        // create a kd-tree from the original data
+        pcl::KdTreeFLANN<PointT> kdtree;
+        kdtree.setInputCloud(segment);
+
 
         ////////////////////////////////////////////////////////////////////////
         // EFFICIENT RANSAC with PPR
@@ -136,9 +148,14 @@ public:
         // planeDetection::planeSegmentationEfficientPPR(segment, params, plane_vec, normal_vec, nonPlanar);
         planeEx.planeSegmentationEfficientPPR(segment, normals, plane_vec_efficient_ppr, normal_vec_efficient_ppr, nonPlanar);
         // PROJECT TO PLANE
+
         for ( size_t i = 0; i < normal_vec_efficient_ppr.size(); ++i ){
             EXX::compression::projectToPlaneS( plane_vec_efficient_ppr[i], normal_vec_efficient_ppr[i] );
         }
+
+        PointCloudT::Ptr error_cloud_EfficientPPR (new PointCloudT);
+        getErrorCloud(plane_vec_efficient_ppr, normal_vec_efficient_ppr, data, data_f, error_cloud_EfficientPPR);
+
         PointCloudT::Ptr outCloudEfficientPPR( new PointCloudT() );
         planeEx.combinePlanes(plane_vec_efficient_ppr, outCloudEfficientPPR, true);
 
@@ -160,6 +177,10 @@ public:
         for ( size_t i = 0; i < normal_vec_efficient.size(); ++i ){
             EXX::compression::projectToPlaneS( plane_vec_efficient[i], normal_vec_efficient[i] );
         }
+
+        PointCloudT::Ptr error_cloud_Efficient (new PointCloudT);
+        getErrorCloud(plane_vec_efficient, normal_vec_efficient, data, data_f, error_cloud_Efficient);
+
         PointCloudT::Ptr outCloudEfficient( new PointCloudT() );
         planeEx.combinePlanes(plane_vec_efficient, outCloudEfficient, true);
         std::cout << "Extracted " << normal_vec_efficient.size() << "  planes, Efficient" << std::endl;
@@ -171,8 +192,82 @@ public:
         pcl::PCDWriter writer;
         writer.write(save_path + "outCloudEfficientPPR_" + var + ".pcd", *outCloudEfficientPPR);
         writer.write(save_path + "outCloudEfficient_" + var + ".pcd", *outCloudEfficient);
+        writer.write(save_path + "errored_cloud_EfficientPPR_" + var + ".pcd", *error_cloud_EfficientPPR);
+        writer.write(save_path + "errored_cloud_Efficient_" + var + ".pcd", *error_cloud_Efficient);
 
     }
+
+    void getErrorCloud(
+            std::vector<PointCloudT::Ptr> plane_vec,
+            std::vector<pcl::ModelCoefficients::Ptr> normal_vec,
+            std::vector <std::vector <int> > data,
+            std::vector <float > data_f,
+            PointCloudT::Ptr error_cloud){
+
+
+        // K nearest neighbor search
+        for(int i = 0; i < plane_vec.size(); ++i){
+        // for(int i = 0; i < 1; ++i){
+            std::vector<int> count(data.size());
+            for(int j = 0; j < plane_vec[i]->size(); ++j){
+
+                // compare color to data vector to find correct plane
+                // find index of same color
+                int r = plane_vec[i]->at(j).r;
+                int g = plane_vec[i]->at(j).g;
+                int b = plane_vec[i]->at(j).b;
+
+                for(int k = 0; k < data.size(); ++k){
+                    if(r == data[k][4] && g == data[k][5] && b == data[k][6]){
+                        count[k]++;
+                        break;
+                    }
+                }
+
+            }
+            // belongs to plane max(count)
+            auto result = std::max_element(count.begin(), count.end());
+            int idx = std::distance(count.begin(), result);
+            std::cout << "Belongs to plane " << idx << std::endl;
+            std::cout << "real normal: " << data[idx][1] << ", " << data[idx][2] << ", " << data[idx][3] << std::endl;
+            std::cout << "estimated normal: " << normal_vec[i]->values[0] << ", " << normal_vec[i]->values[1] << ", " << normal_vec[i]->values[2] << std::endl;
+
+            // loop through it again and color based on correctly classified
+            int r = data[idx][4];
+            int g = data[idx][5];
+            int b = data[idx][6];
+            Eigen::Vector4f vec;
+
+            // TODO:
+            // vec should be from data, data is missing d component, add
+
+            vec[0] = data[idx][1];
+            vec[1] = data[idx][2];
+            vec[2] = data[idx][3];
+            vec[3] = data_f[idx];
+            for(int j = 0; j < plane_vec[i]->size(); ++j){
+                if(plane_vec[i]->at(j).r == r && plane_vec[i]->at(j).g == g && plane_vec[i]->at(j).b == b ){
+                    float dist = pcl::pointToPlaneDistance( plane_vec[i]->at(j), vec);
+                    // std::cout << "dist: " << dist << std::endl;
+                    plane_vec[i]->at(j).r = 255;
+                    plane_vec[i]->at(j).g = 255;
+                    plane_vec[i]->at(j).b = 255-std::min(int(dist*100),255);
+                } else {
+                    plane_vec[i]->at(j).r = 0;
+                    plane_vec[i]->at(j).g = 0;
+                    plane_vec[i]->at(j).b = 255;
+                }
+
+            }
+        }
+
+        // PointCloudT::Ptr errored_cloud (new PointCloudT);
+        for(auto c : plane_vec){
+            *error_cloud += *c;
+        }
+    }
+
+
 };
 
 int main(int argc, char **argv) {

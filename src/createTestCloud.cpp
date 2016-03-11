@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
     // ros::Rate loop_rate(10);
 
     double tableDistFromWall = 0.05;
-    double variance = 0.02;
+    double variance = 0.020;
     auto pos = std::to_string(variance).find_last_of (".");
     std::string num = std::to_string(variance).substr (pos+1, 3);
 
@@ -130,7 +130,8 @@ int main(int argc, char **argv) {
     cloud_window5->points.resize (cloud_window5->width * cloud_window5->height);
 
     std::vector<std::vector<int> > normals;
-    std::vector<int> normal(3);
+    std::vector<int> normal(6);
+    std::vector<float> norm_d;
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0, 5);
@@ -138,8 +139,11 @@ int main(int argc, char **argv) {
     normal[0] = 0;
     normal[1] = 0;
     normal[2] = 1;
+    normal[3] = 255;
+    normal[4] = 255;
+    normal[5] = 255;
+    norm_d.push_back(0);
     normals.push_back(normal);
-
     for (size_t i = 0; i < cloud_floor->points.size (); ++i){
         cloud_floor->points[i].x = dis(gen);
         cloud_floor->points[i].y = dis(gen);
@@ -155,6 +159,10 @@ int main(int argc, char **argv) {
     normal[0] = 1;
     normal[1] = 0;
     normal[2] = 0;
+    normal[3] = 200;
+    normal[4] = 200;
+    normal[5] = 200;
+    norm_d.push_back(0);
     normals.push_back(normal);
     for (size_t i = 0; i < cloud_wall1->points.size (); ++i){
         cloud_wall1->points[i].y = dis_wall1(gen);
@@ -168,6 +176,10 @@ int main(int argc, char **argv) {
     normal[0] = 0;
     normal[1] = 1;
     normal[2] = 0;
+    normal[3] = 220;
+    normal[4] = 220;
+    normal[5] = 220;
+    norm_d.push_back(0);
     normals.push_back(normal);
     for (size_t i = 0; i < cloud_wall2->points.size (); ++i){
         cloud_wall2->points[i].x = dis_wall1(gen);
@@ -183,6 +195,10 @@ int main(int argc, char **argv) {
     normal[0] = 0;
     normal[1] = 0;
     normal[2] = 1;
+    normal[3] = 182+20;
+    normal[4] = 155+20;
+    normal[5] = 76+20;
+    norm_d.push_back(1.0);
     normals.push_back(normal);
     for (size_t i = 0; i < cloud_shelf3->points.size(); ++i){
       cloud_shelf3->points[i].x = dis_shelf3(gen);
@@ -199,6 +215,10 @@ int main(int argc, char **argv) {
     normal[0] = 1;
     normal[1] = 0;
     normal[2] = 0;
+    normal[3] = 182;
+    normal[4] = 155;
+    normal[5] = 76;
+    norm_d.push_back(0.7);
     normals.push_back(normal);
     for (size_t i = 0; i < cloud_shelf1->points.size (); ++i){
         cloud_shelf1->points[i].y = dis_shelf1(gen);
@@ -212,6 +232,10 @@ int main(int argc, char **argv) {
     normal[0] = 0;
     normal[1] = 1;
     normal[2] = 0;
+    normal[3] = 182+10;
+    normal[4] = 155+10;
+    normal[5] = 76+10;
+    norm_d.push_back(0.7);
     normals.push_back(normal);
     for (size_t i = 0; i < cloud_shelf2->points.size(); ++i){
         cloud_shelf2->points[i].x = dis_shelf1(gen);
@@ -228,6 +252,10 @@ int main(int argc, char **argv) {
     normal[0] = 1;
     normal[1] = 0;
     normal[2] = 0;
+    normal[3] = 135;
+    normal[4] = 206;
+    normal[5] = 250;
+    norm_d.push_back(tableDistFromWall);
     normals.push_back(normal);
     for (size_t i = 0; i < cloud_table->points.size(); ++i){
         cloud_table->points[i].y = dis_table(gen);
@@ -246,14 +274,18 @@ int main(int argc, char **argv) {
     normal[0] = 1;
     normal[1] = 0;
     normal[2] = 0;
+    normal[3] = 44+1;
+    normal[4] = 62+1;
+    normal[5] = 80+1;
+    norm_d.push_back(1.5);
     normals.push_back(normal);
     for (size_t i = 0; i < cloud_window1->points.size(); ++i){
         cloud_window1->points[i].y = dis_window1(gen);
         cloud_window1->points[i].z = disz_window1(gen);
         cloud_window1->points[i].x = d_window1(gen);
-        cloud_window1->points[i].r = 44;
-        cloud_window1->points[i].g = 62;
-        cloud_window1->points[i].b = 80;
+        cloud_window1->points[i].r = 44+1;
+        cloud_window1->points[i].g = 62+1;
+        cloud_window1->points[i].b = 80+1;
     }
     std::uniform_real_distribution<> dis_window2(-0.4, 0);
     std::uniform_real_distribution<> disz_window2(1.2, 2.4);
@@ -261,14 +293,18 @@ int main(int argc, char **argv) {
     normal[0] = 1;
     normal[1] = 0;
     normal[2] = 0;
+    normal[3] = 44+2;
+    normal[4] = 62+2;
+    normal[5] = 80+2;
+    norm_d.push_back(3.5);
     normals.push_back(normal);
     for (size_t i = 0; i < cloud_window2->points.size(); ++i){
         cloud_window2->points[i].y = dis_window2(gen);
         cloud_window2->points[i].z = disz_window2(gen);
         cloud_window2->points[i].x = d_window2(gen);
-        cloud_window2->points[i].r = 44;
-        cloud_window2->points[i].g = 62;
-        cloud_window2->points[i].b = 80;
+        cloud_window2->points[i].r = 44+2;
+        cloud_window2->points[i].g = 62+2;
+        cloud_window2->points[i].b = 80+2;
     }
     std::uniform_real_distribution<> dis_window3(-0.4, 0);
     std::uniform_real_distribution<> disz_window3(1.5, 3.5);
@@ -276,6 +312,10 @@ int main(int argc, char **argv) {
     normal[0] = 0;
     normal[1] = 0;
     normal[2] = 1;
+    normal[3] = 44;
+    normal[4] = 62;
+    normal[5] = 80;
+    norm_d.push_back(1.2);
     normals.push_back(normal);
     for (size_t i = 0; i < cloud_window3->points.size(); ++i){
         cloud_window3->points[i].y = dis_window3(gen);
@@ -291,14 +331,18 @@ int main(int argc, char **argv) {
     normal[0] = 0;
     normal[1] = 0;
     normal[2] = 1;
+    normal[3] = 44+3;
+    normal[4] = 62+3;
+    normal[5] = 80+3;
+    norm_d.push_back(2.4);
     normals.push_back(normal);
     for (size_t i = 0; i < cloud_window4->points.size(); ++i){
         cloud_window4->points[i].y = dis_window4(gen);
         cloud_window4->points[i].x = disz_window4(gen);
         cloud_window4->points[i].z = d_window4(gen);
-        cloud_window4->points[i].r = 44;
-        cloud_window4->points[i].g = 62;
-        cloud_window4->points[i].b = 80;
+        cloud_window4->points[i].r = 44+3;
+        cloud_window4->points[i].g = 62+3;
+        cloud_window4->points[i].b = 80+3;
     }
     std::uniform_real_distribution<> dis_window5(1.5, 3.5);
     std::uniform_real_distribution<> disz_window5(1.2, 2.4);
@@ -306,14 +350,18 @@ int main(int argc, char **argv) {
     normal[0] = 0;
     normal[1] = 1;
     normal[2] = 0;
+    normal[3] = 254;
+    normal[4] = 254;
+    normal[5] = 254;
+    norm_d.push_back(-0.4);
     normals.push_back(normal);
     for (size_t i = 0; i < cloud_window5->points.size(); ++i){
         cloud_window5->points[i].x = dis_window5(gen);
         cloud_window5->points[i].z = disz_window5(gen);
         cloud_window5->points[i].y = d_window5(gen);
-        cloud_window5->points[i].r = 255;
-        cloud_window5->points[i].g = 255;
-        cloud_window5->points[i].b = 255;
+        cloud_window5->points[i].r = 254;
+        cloud_window5->points[i].g = 254;
+        cloud_window5->points[i].b = 254;
     }
 
 
@@ -359,13 +407,12 @@ int main(int argc, char **argv) {
     std::string sizes_name = path + "testCloud_complete_" + num + ".txt";
     fs.open (sizes_name.c_str ());
     for(int i = 0; i < sizes.size(); ++i){
-        fs << sizes[i] << ",";
+        fs << sizes[i] << ";";
         for(int j = 0; j < normals[i].size(); ++j){
         // for(auto j : normals[i]){
-            fs << normals[i][j];
-            if(j != 2) fs << ",";
-            else fs << std::endl;
+            fs << normals[i][j] << ";";
         }
+        fs << norm_d[i] << std::endl;
     }
     fs.close();
     pcl::PCDWriter writer;
