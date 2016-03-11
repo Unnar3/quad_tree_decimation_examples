@@ -11,6 +11,11 @@
 // PCL specific includes
 #include <pcl_conversions/pcl_conversions.h>
 
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
+
 
 // DEFINITIONS
 #define NODE_NAME               "test_surfel"
@@ -49,7 +54,7 @@ public:
         cmprs.setGP3Mu( loadParam<double>("GP3Mu", nh) );
         cmprs.setGP3MaxNearestNeighbours( loadParam<double>("GP3MaxNearestNeighbours", nh) );
         cmprs.setGP3Ksearch( loadParam<double>("GP3Ksearch", nh) );
-        //
+
         QTD::QuadTreePCL<pcl::PointXYZ> qtpcl(1,10,0,0);
 
         params.number_disjoint_subsets = loadParam<int>("disjoinedSet", nh);
@@ -68,14 +73,49 @@ public:
     }
 
     void testComparison(void){
-        std::string path = loadParam<std::string>("path_test", nh);
-        std::string path_save = loadParam<std::string>("path_save", nh);
+
+        std::string test_cloud = loadParam<std::string>("test_cloud", nh);
+        std::string test_cloud_name = loadParam<std::string>("test_cloud_name", nh);
+        std::string save_path = loadParam<std::string>("save_path_comparison", nh);
+
+        // find variance from name
+        std::string var = test_cloud_name.substr(test_cloud_name.find_last_of("_")+1,3);
+
+
+        // read appropriate txt file;
+        std::string txt_name = test_cloud_name.substr(0,test_cloud_name.find_last_of(".")) + ".txt";
+
+        std::vector <std::vector <int> > data;
+        std::ifstream infile( test_cloud + txt_name );
+        while (infile)
+        {
+            std::string s;
+            if (!std::getline( infile, s )) break;
+
+            std::istringstream ss( s );
+            std::vector <int> record;
+            while (ss)
+            {
+                std::string s;
+                if (!getline( ss, s, ',' )) break;
+                record.push_back( std::stoi(s) );
+            }
+
+            data.push_back( record );
+        }
+        if (!infile.eof())
+        {
+            std::cerr << "Fooey!\n";
+            // std::cout << data.size() << std::endl;
+            // std::cout << test_cloud + txt_name << std::endl;
+        }
+
 
         PointCloudT::Ptr segment (new PointCloudT());
         NormalCloudT::Ptr normals (new NormalCloudT());
 
         pcl::PCDReader reader;
-        reader.read (path + "testCloud_complete.pcd", *segment);
+        reader.read (test_cloud + test_cloud_name, *segment);
 
         std::cout << "segment: " << segment->points.size() << std::endl;
 
@@ -101,13 +141,13 @@ public:
         }
         PointCloudT::Ptr outCloudEfficientPPR( new PointCloudT() );
         planeEx.combinePlanes(plane_vec_efficient_ppr, outCloudEfficientPPR, true);
-        //
+
         std::cout << "Extracted " << plane_vec_efficient_ppr.size() << "  planes, Efficient PPR" << std::endl;
         std::cout << "Planar points: " << outCloudEfficientPPR->points.size() << std::endl;
         std::cout << "Non planar points: " << nonPlanar->points.size() << std::endl;
         std::cout << "Combined: " << outCloudEfficientPPR->points.size() + nonPlanar->points.size() << std::endl;
         std::cout << " " << std::endl;
-        //
+
         // ////////////////////////////////////////////////////////////////////////
         // // EFFICIENT RANSAC
         // ////////////////////////////////////////////////////////////////////////
@@ -129,8 +169,8 @@ public:
         std::cout << " " << std::endl;
 
         pcl::PCDWriter writer;
-        writer.write(path_save + "outCloudEfficientPPR.pcd", *outCloudEfficientPPR);
-        writer.write(path + "outCloudEfficient.pcd", *outCloudEfficient);
+        writer.write(save_path + "outCloudEfficientPPR_" + var + ".pcd", *outCloudEfficientPPR);
+        writer.write(save_path + "outCloudEfficient_" + var + ".pcd", *outCloudEfficient);
 
     }
 };

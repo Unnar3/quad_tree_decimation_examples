@@ -9,6 +9,10 @@ path                    : /media/unnar/HDD/thesis/pointclouds/KTH/KTH_longterm_s
 # Kitchen
 # path                  : /media/unnar/HDD/thesis/pointclouds/KTH/KTH_Waypoints/WayPoint10/20160107/patrol_run_16/room_0/,
 
+test_cloud              : /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/test_cloud/,
+test_cloud_name         : testCloud_complete_020.pcd,
+save_path_comparison    : /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/comparison/,
+
 path_test               : /home/unnar/catkin_ws/src/EXXJOBB/test/planeDetectionComparison/src/,
 path_save               : /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/,
 
