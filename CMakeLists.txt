@@ -43,5 +43,8 @@ include_directories(
 add_executable(qtde_comparison src/planeExtractionComparison.cpp)
 target_link_libraries(qtde_comparison ${catkin_LIBRARIES} ${QT_LIBRARIES} qtd_quad_tree qtd_quad_tree_pcl compression)
 
+add_executable(qtde_test_cloud_mesh src/testCloudMesh.cpp)
+target_link_libraries(qtde_test_cloud_mesh ${catkin_LIBRARIES} ${QT_LIBRARIES} qtd_quad_tree qtd_quad_tree_pcl compression qtd_utils)
+
 add_executable(qtde_createTestCloud src/createTestCloud.cpp)
 target_link_libraries(qtde_createTestCloud ${catkin_LIBRARIES})

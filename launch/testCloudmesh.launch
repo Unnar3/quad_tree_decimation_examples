@@ -1,0 +1,5 @@
+<launch>
+	<node pkg="quad_tree_decimation_example" type="qtde_test_cloud_mesh" name="qtde_test_cloud_mesh" clear_params="true" output="screen">
+		<rosparam file="$(find quad_tree_decimation_example)/include/parameters/parameters.yaml" command="load"/>
+	</node>
+</launch>

@@ -20,7 +20,7 @@
 
 
 // DEFINITIONS
-#define NODE_NAME               "test_surfel"
+#define NODE_NAME               "test_cloud_mesh"
 
 using PointT = pcl::PointXYZRGB;
 using PointCloudT = pcl::PointCloud<PointT>;
@@ -82,7 +82,8 @@ public:
 
         // find variance from name
         std::string var = test_cloud_name.substr(test_cloud_name.find_last_of("_")+1,3);
-
+        std::string norm = std::to_string(params.normal_neigbourhood);
+        norm = norm.substr(norm.find_last_of(".")+1,3);
 
         // read appropriate txt file;
         std::string txt_name = test_cloud_name.substr(0,test_cloud_name.find_last_of(".")) + ".txt";
@@ -102,11 +103,14 @@ public:
             {
                 std::string s;
                 if (!getline( ss, s, ';' )) break;
-                if(count < 6){
+                if(count < 7){
                     record.push_back( std::stoi(s) );
                 }
-                else
+                else{
+                    // std::cout << "s: " << s << std::endl;
                     data_f.push_back( std::stof(s) );
+                }
+                count++;
             }
 
             data.push_back( record );
@@ -117,6 +121,10 @@ public:
             // std::cout << data.size() << std::endl;
             // std::cout << test_cloud + txt_name << std::endl;
         }
+        // for (auto p : data_f){
+        //     std::cout << p << std::endl;
+        // }
+        // // exit(0);
 
 
         PointCloudT::Ptr segment (new PointCloudT());
@@ -154,15 +162,32 @@ public:
         }
 
         PointCloudT::Ptr error_cloud_EfficientPPR (new PointCloudT);
-        getErrorCloud(plane_vec_efficient_ppr, normal_vec_efficient_ppr, data, data_f, error_cloud_EfficientPPR);
+        int incorrectPPR = 0;
+        float average_distPPR = 0;
+        getErrorCloud(plane_vec_efficient_ppr, normal_vec_efficient_ppr, nonPlanar, data, data_f, error_cloud_EfficientPPR, incorrectPPR, average_distPPR);
 
         PointCloudT::Ptr outCloudEfficientPPR( new PointCloudT() );
         planeEx.combinePlanes(plane_vec_efficient_ppr, outCloudEfficientPPR, true);
+
+        std::ofstream fsPPR;
+        std::string PPRtxt = save_path + "outCloudEfficientPPR_" + var + "_" + norm +".txt";
+        fsPPR.open (PPRtxt.c_str ());
+        fsPPR << "Efficient PPR" << std::endl;
+        fsPPR << "Number of points: " << segment->size() << std::endl;
+        fsPPR << "Number of planes: " << plane_vec_efficient_ppr.size() << std::endl;
+        fsPPR << "Planar points: " << outCloudEfficientPPR->points.size() << std::endl;
+        fsPPR << "NonPlanar points: " << nonPlanar->points.size() << std::endl;
+        fsPPR << "Combined: " << outCloudEfficientPPR->points.size() + nonPlanar->points.size() << std::endl;
+        fsPPR << "Incorrect: " << incorrectPPR << std::endl;
+        fsPPR << "Average distance: " << average_distPPR << std::endl;
+        fsPPR.close();
 
         std::cout << "Extracted " << plane_vec_efficient_ppr.size() << "  planes, Efficient PPR" << std::endl;
         std::cout << "Planar points: " << outCloudEfficientPPR->points.size() << std::endl;
         std::cout << "Non planar points: " << nonPlanar->points.size() << std::endl;
         std::cout << "Combined: " << outCloudEfficientPPR->points.size() + nonPlanar->points.size() << std::endl;
+        std::cout << "incorrect: " << incorrectPPR << std::endl;
+        std::cout << "average distance: " << average_distPPR << std::endl;
         std::cout << " " << std::endl;
 
         // ////////////////////////////////////////////////////////////////////////
@@ -179,7 +204,9 @@ public:
         }
 
         PointCloudT::Ptr error_cloud_Efficient (new PointCloudT);
-        getErrorCloud(plane_vec_efficient, normal_vec_efficient, data, data_f, error_cloud_Efficient);
+        int incorrectEPPR = 0;
+        float average_distEPPR = 0;
+        getErrorCloud(plane_vec_efficient, normal_vec_efficient, nonPlanar_efficient, data, data_f, error_cloud_Efficient,  incorrectEPPR, average_distEPPR);
 
         PointCloudT::Ptr outCloudEfficient( new PointCloudT() );
         planeEx.combinePlanes(plane_vec_efficient, outCloudEfficient, true);
@@ -187,23 +214,43 @@ public:
         std::cout << "Planar points: " << outCloudEfficient->points.size() << std::endl;
         std::cout << "Non planar points: " << nonPlanar_efficient->points.size() << std::endl;
         std::cout << "Combined: " << outCloudEfficient->points.size() + nonPlanar_efficient->points.size() << std::endl;
+        std::cout << "incorrect: " << incorrectEPPR << std::endl;
+        std::cout << "average distance: " << average_distEPPR << std::endl;
         std::cout << " " << std::endl;
 
+        std::ofstream fsEPPR;
+        std::string EPPRtxt = save_path + "outCloudEfficient_" + var + "_" + norm +".txt";
+        fsEPPR.open (EPPRtxt.c_str ());
+        fsEPPR << "Efficient" << std::endl;
+        fsEPPR << "Number of points: " << segment->size() << std::endl;
+        fsEPPR << "Number of planes: " << plane_vec_efficient.size() << std::endl;
+        fsEPPR << "Planar points: " << outCloudEfficient->points.size() << std::endl;
+        fsEPPR << "NonPlanar points: " << nonPlanar_efficient->points.size() << std::endl;
+        fsEPPR << "Combined: " << outCloudEfficient->points.size() + nonPlanar_efficient->points.size() << std::endl;
+        fsEPPR << "Incorrect: " << incorrectEPPR << std::endl;
+        fsEPPR << "Average distance: " << average_distEPPR << std::endl;
+        fsEPPR.close();
+
         pcl::PCDWriter writer;
-        writer.write(save_path + "outCloudEfficientPPR_" + var + ".pcd", *outCloudEfficientPPR);
-        writer.write(save_path + "outCloudEfficient_" + var + ".pcd", *outCloudEfficient);
-        writer.write(save_path + "errored_cloud_EfficientPPR_" + var + ".pcd", *error_cloud_EfficientPPR);
-        writer.write(save_path + "errored_cloud_Efficient_" + var + ".pcd", *error_cloud_Efficient);
+        writer.write(save_path + "outCloudEfficientPPR_" + var + "_" + norm +".pcd", *outCloudEfficientPPR);
+        writer.write(save_path + "outCloudEfficient_" + var + "_" + norm +".pcd", *outCloudEfficient);
+        writer.write(save_path + "errored_cloud_EfficientPPR_" + var + "_" + norm +".pcd", *error_cloud_EfficientPPR);
+        writer.write(save_path + "errored_cloud_Efficient_" + var + "_" + norm +".pcd", *error_cloud_Efficient);
 
     }
 
     void getErrorCloud(
             std::vector<PointCloudT::Ptr> plane_vec,
             std::vector<pcl::ModelCoefficients::Ptr> normal_vec,
+            PointCloudT::Ptr nonPlanar,
             std::vector <std::vector <int> > data,
             std::vector <float > data_f,
-            PointCloudT::Ptr error_cloud){
+            PointCloudT::Ptr error_cloud,
+            int &incorrect,
+            float &average_dist){
 
+
+        int countAverage = 0;
 
         // K nearest neighbor search
         for(int i = 0; i < plane_vec.size(); ++i){
@@ -228,9 +275,6 @@ public:
             // belongs to plane max(count)
             auto result = std::max_element(count.begin(), count.end());
             int idx = std::distance(count.begin(), result);
-            std::cout << "Belongs to plane " << idx << std::endl;
-            std::cout << "real normal: " << data[idx][1] << ", " << data[idx][2] << ", " << data[idx][3] << std::endl;
-            std::cout << "estimated normal: " << normal_vec[i]->values[0] << ", " << normal_vec[i]->values[1] << ", " << normal_vec[i]->values[2] << std::endl;
 
             // loop through it again and color based on correctly classified
             int r = data[idx][4];
@@ -244,18 +288,23 @@ public:
             vec[0] = data[idx][1];
             vec[1] = data[idx][2];
             vec[2] = data[idx][3];
-            vec[3] = data_f[idx];
+            vec[3] = -data_f[idx];
             for(int j = 0; j < plane_vec[i]->size(); ++j){
                 if(plane_vec[i]->at(j).r == r && plane_vec[i]->at(j).g == g && plane_vec[i]->at(j).b == b ){
                     float dist = pcl::pointToPlaneDistance( plane_vec[i]->at(j), vec);
-                    // std::cout << "dist: " << dist << std::endl;
-                    plane_vec[i]->at(j).r = 255;
-                    plane_vec[i]->at(j).g = 255;
-                    plane_vec[i]->at(j).b = 255-std::min(int(dist*100),255);
+                    average_dist += dist;
+                    countAverage++;
+                    int R,G,B;
+                    gradientColor(34,167,240,247,202,24,R,G,B,dist,0.05);
+
+                    plane_vec[i]->at(j).r = R;
+                    plane_vec[i]->at(j).g = G;
+                    plane_vec[i]->at(j).b = B;
                 } else {
-                    plane_vec[i]->at(j).r = 0;
-                    plane_vec[i]->at(j).g = 0;
-                    plane_vec[i]->at(j).b = 255;
+                    incorrect++;
+                    plane_vec[i]->at(j).r = 239;
+                    plane_vec[i]->at(j).g = 72;
+                    plane_vec[i]->at(j).b = 54;
                 }
 
             }
@@ -265,6 +314,27 @@ public:
         for(auto c : plane_vec){
             *error_cloud += *c;
         }
+
+        for(auto &p : nonPlanar->points){
+            p.r = 255;
+            p.g = 255;
+            p.b = 255;
+        }
+        *error_cloud += *nonPlanar;
+        average_dist /= (float)countAverage;
+
+    }
+
+    void gradientColor(int startR, int startG, int startB,
+                        int endR, int endG, int endB,
+                        int &outR, int &outG, int &outB,
+                        float dist, float maxDist){
+
+        float value = std::min(dist, maxDist) / maxDist;
+
+        outR =  startR + (int)((endR-startR)*value);
+        outG =  startG + (int)((endG-startG)*value);
+        outB =  startB + (int)((endB-startB)*value);
     }
 
 

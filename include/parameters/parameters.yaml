@@ -10,8 +10,9 @@ path                    : /media/unnar/HDD/thesis/pointclouds/KTH/KTH_longterm_s
 # path                  : /media/unnar/HDD/thesis/pointclouds/KTH/KTH_Waypoints/WayPoint10/20160107/patrol_run_16/room_0/,
 
 test_cloud              : /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/test_cloud/,
-test_cloud_name         : testCloud_complete_020.pcd,
+test_cloud_name         : testCloud_complete_001.pcd,
 save_path_comparison    : /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/comparison/,
+save_path_testCloudMesh : /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/test_cloud_mesh/,
 
 path_test               : /home/unnar/catkin_ws/src/EXXJOBB/test/planeDetectionComparison/src/,
 path_save               : /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/,
@@ -52,16 +53,16 @@ HZ                      : 20,
 
 
 # NO NOISE, EFFICIENT PPR
-# disjoinedSet            : 10,
-# octree_res              : 1.0,
-# normal_neigbourhood     : 0.04,
-# inlier_threshold        : 0.02,
-# inlier_min              : 250,
-# min_shape               : 250,
-# angle_threshold         : 0.1,
-# add_threshold           : 0.1,
-# connectedness_res       : 0.2,
-# distance_threshold      : 0.0,
+disjoinedSet            : 10,
+octree_res              : 1.0,
+normal_neigbourhood     : 0.04,
+inlier_threshold        : 0.02,
+inlier_min              : 250,
+min_shape               : 250,
+angle_threshold         : 0.1,
+add_threshold           : 0.1,
+connectedness_res       : 0.1,
+distance_threshold      : 0.0,
 
 
 
@@ -74,20 +75,32 @@ HZ                      : 20,
 # min_shape               : 250,
 # angle_threshold         : 0.6,
 # add_threshold           : 0.1,
-# connectedness_res       : 0.2,
+# connectedness_res       : 0.05,
 # distance_threshold      : 0.0,
 
 # 0.02 NOISE, EFFICIENT MANY PLANES
-disjoinedSet            : 10,
-octree_res              : 1.0,
-normal_neigbourhood     : 0.2,
-inlier_threshold        : 0.03,
-inlier_min              : 250,
-min_shape               : 250,
-angle_threshold         : 0.3,
-add_threshold           : 0.1,
-connectedness_res       : 0.2,
-distance_threshold      : 0.0,
+# disjoinedSet            : 10,
+# octree_res              : 1.0,
+# normal_neigbourhood     : 0.201,
+# inlier_threshold        : 0.03,
+# inlier_min              : 250,
+# min_shape               : 250,
+# angle_threshold         : 0.3,
+# add_threshold           : 0.1,
+# connectedness_res       : 0.2,
+# distance_threshold      : 0.0,
 
+
+# 0.02 NOISE, EFFICIENT PPR
+# disjoinedSet            : 10,
+# octree_res              : 1.0,
+# normal_neigbourhood     : 0.199,
+# inlier_threshold        : 0.03,
+# inlier_min              : 250,
+# min_shape               : 250,
+# angle_threshold         : 0.3,
+# add_threshold           : 0.1,
+# connectedness_res       : 0.2,
+# distance_threshold      : 0.0,
 
 }
