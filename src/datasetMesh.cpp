@@ -162,6 +162,48 @@ public:
         }
 
 
+        EXX::compression cmprs;
+        cmprs.setRWHullMaxDist(0.02);
+        cmprs.setHULLAlpha(0.07);
+
+        std::vector<PointCloudT::Ptr> hulls;
+        cmprs.planeToConcaveHull(&plane_vec, &hulls);
+        std::vector<EXX::densityDescriptor> dDesc;
+        EXX::densityDescriptor dens;
+        dens.rw_max_dist = 0.15;
+        dDesc.push_back(dens);
+        std::vector<PointCloudT::Ptr> simplified_hulls;
+        cmprs.reumannWitkamLineSimplification( &hulls, &simplified_hulls, dDesc);
+
+
+        QTD::objStruct<PointT> object(1);
+        for ( size_t i = 0; i < plane_vec.size(); ++i ){
+        // for ( size_t i = 0; i < 2; ++i ){
+
+            QTD::QuadTreePCL<PointT> qtpcl(1,10,0,0);
+            // qtpcl.setMaxLevel(10);
+            qtpcl.setMaxWidth(1);
+            qtpcl.setNormal(normal_vec[i]);
+
+            PointCloudT::Ptr out (new PointCloudT());
+            std::vector< pcl::Vertices > vertices;
+            qtpcl.insertBoundary(hulls[i]);
+            qtpcl.createMesh<PointT>(out, vertices);
+
+            cv::Mat image;
+            std::vector<Eigen::Vector2f> vertex_texture;
+            qtpcl.createTexture<PointT>(plane_vec[i], out, image, vertex_texture);
+
+            object.clouds.push_back(out);
+            object.polygons.push_back(vertices);
+            object.images.push_back(image);
+            object.texture_vertices.push_back(vertex_texture);
+            object.coefficients.push_back(normal_vec[i]);
+
+        }
+        QTD::saveOBJFile(dataset_save + save_prefix + "_mesh.obj", object, 5);
+
+
         PointCloudT::Ptr outCloudEfficientPPR( new PointCloudT() );
         planeEx.combinePlanes(plane_vec, outCloudEfficientPPR, true);
 

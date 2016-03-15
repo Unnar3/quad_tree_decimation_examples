@@ -40,6 +40,9 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+add_executable(qtde_insertSegments src/insertSegmentTest.cpp)
+target_link_libraries(qtde_insertSegments ${catkin_LIBRARIES} qtd_quad_tree qtd_quad_tree_pcl)
+
 add_executable(qtde_datasetMesh src/datasetMesh.cpp)
 target_link_libraries(qtde_datasetMesh ${catkin_LIBRARIES} ${QT_LIBRARIES} qtd_quad_tree qtd_quad_tree_pcl compression)
 

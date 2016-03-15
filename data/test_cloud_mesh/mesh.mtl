@@ -1,0 +1,102 @@
+#
+# Wavefront material file
+#
+newmtl material_0
+Ka 0.2 0.2 0.2
+Kd 0.8 0.8 0.8
+Ks 1.0 1.0 1.0
+d 1
+Ns 1
+illum 2
+map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/test_cloud_mesh/texture_0.png
+###
+newmtl material_1
+Ka 0.2 0.2 0.2
+Kd 0.8 0.8 0.8
+Ks 1.0 1.0 1.0
+d 1
+Ns 1
+illum 2
+map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/test_cloud_mesh/texture_1.png
+###
+newmtl material_2
+Ka 0.2 0.2 0.2
+Kd 0.8 0.8 0.8
+Ks 1.0 1.0 1.0
+d 1
+Ns 1
+illum 2
+map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/test_cloud_mesh/texture_2.png
+###
+newmtl material_3
+Ka 0.2 0.2 0.2
+Kd 0.8 0.8 0.8
+Ks 1.0 1.0 1.0
+d 1
+Ns 1
+illum 2
+map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/test_cloud_mesh/texture_3.png
+###
+newmtl material_4
+Ka 0.2 0.2 0.2
+Kd 0.8 0.8 0.8
+Ks 1.0 1.0 1.0
+d 1
+Ns 1
+illum 2
+map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/test_cloud_mesh/texture_4.png
+###
+newmtl material_5
+Ka 0.2 0.2 0.2
+Kd 0.8 0.8 0.8
+Ks 1.0 1.0 1.0
+d 1
+Ns 1
+illum 2
+map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/test_cloud_mesh/texture_5.png
+###
+newmtl material_6
+Ka 0.2 0.2 0.2
+Kd 0.8 0.8 0.8
+Ks 1.0 1.0 1.0
+d 1
+Ns 1
+illum 2
+map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/test_cloud_mesh/texture_6.png
+###
+newmtl material_7
+Ka 0.2 0.2 0.2
+Kd 0.8 0.8 0.8
+Ks 1.0 1.0 1.0
+d 1
+Ns 1
+illum 2
+map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/test_cloud_mesh/texture_7.png
+###
+newmtl material_8
+Ka 0.2 0.2 0.2
+Kd 0.8 0.8 0.8
+Ks 1.0 1.0 1.0
+d 1
+Ns 1
+illum 2
+map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/test_cloud_mesh/texture_8.png
+###
+newmtl material_9
+Ka 0.2 0.2 0.2
+Kd 0.8 0.8 0.8
+Ks 1.0 1.0 1.0
+d 1
+Ns 1
+illum 2
+map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/test_cloud_mesh/texture_9.png
+###
+newmtl material_10
+Ka 0.2 0.2 0.2
+Kd 0.8 0.8 0.8
+Ks 1.0 1.0 1.0
+d 1
+Ns 1
+illum 2
+map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/test_cloud_mesh/texture_10.png
+###

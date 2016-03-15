@@ -141,7 +141,7 @@ public:
 
             PointCloudT::Ptr out (new PointCloudT());
             std::vector< pcl::Vertices > vertices;
-            qtpcl.insertBoundary(hulls[i]);
+            qtpcl.insertSegments(hulls[i]);
             qtpcl.createMesh<PointT>(out, vertices);
 
             cv::Mat image;

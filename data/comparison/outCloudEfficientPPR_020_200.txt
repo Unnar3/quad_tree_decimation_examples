@@ -1,0 +1,8 @@
+Efficient PPR
+Number of points: 169495
+Number of planes: 5
+Planar points: 116653
+NonPlanar points: 52842
+Combined: 169495
+Incorrect: 2801
+Average distance: 0.00191059

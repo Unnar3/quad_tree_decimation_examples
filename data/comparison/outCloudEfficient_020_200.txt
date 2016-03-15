@@ -1,0 +1,8 @@
+Efficient
+Number of points: 169495
+Number of planes: 15
+Planar points: 165914
+NonPlanar points: 3581
+Combined: 169495
+Incorrect: 11476
+Average distance: 0.0265122
