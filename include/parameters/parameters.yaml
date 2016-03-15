@@ -1,5 +1,11 @@
 {
 
+dataset_path            : /media/unnar/HDD/thesis/Dataset_upload/20140905/,
+# dataset_cloud           : patrol_run_16/WayPoint5/complete_cloud.pcd,
+# dataset_cloud           : patrol_run_16/WayPoint5/surfel_map_lower.pcd,
+dataset_cloud           : patrol_run_17/WayPoint16/surfel_map_lower.pcd,
+dataset_save            : /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/dataset_mesh/,
+
 # Path to clouds
 # path                  : /media/unnar/HDD/thesis/pointclouds/KTH/KTH_Waypoints/WayPoint9/20151221/patrol_run_9/room_1/,
 # path                  : /media/unnar/HDD/thesis/pointclouds/KTH/KTH_longterm_surfels/20140820/patrol_run_2/room_1/,
@@ -18,7 +24,7 @@ path_test               : /home/unnar/catkin_ws/src/EXXJOBB/test/planeDetectionC
 path_save               : /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/,
 
 # Compression class params
-VoxelLeafSize           : 0.01, # Cannot be smaller than SVVoxelResolution
+VoxelLeafSize           : 0.02, # Cannot be smaller than SVVoxelResolution
 SVVoxelResolution       : 0.02,
 SVSeedResolution        : 0.2,
 SVColorImportance       : 0.1,
@@ -53,16 +59,16 @@ HZ                      : 20,
 
 
 # NO NOISE, EFFICIENT PPR
-disjoinedSet            : 10,
-octree_res              : 1.0,
-normal_neigbourhood     : 0.04,
-inlier_threshold        : 0.02,
-inlier_min              : 250,
-min_shape               : 250,
-angle_threshold         : 0.1,
-add_threshold           : 0.1,
-connectedness_res       : 0.1,
-distance_threshold      : 0.0,
+# disjoinedSet            : 10,
+# octree_res              : 1.0,
+# normal_neigbourhood     : 0.04,
+# inlier_threshold        : 0.02,
+# inlier_min              : 250,
+# min_shape               : 250,
+# angle_threshold         : 0.1,
+# add_threshold           : 0.1,
+# connectedness_res       : 0.1,
+# distance_threshold      : 0.0,
 
 
 
@@ -102,5 +108,18 @@ distance_threshold      : 0.0,
 # add_threshold           : 0.1,
 # connectedness_res       : 0.2,
 # distance_threshold      : 0.0,
+
+
+# dataset Mesh
+disjoinedSet            : 10,
+octree_res              : 1.0,
+normal_neigbourhood     : 0.2,
+inlier_threshold        : 0.1,
+inlier_min              : 500,
+min_shape               : 500,
+angle_threshold         : 0.10,
+add_threshold           : 0.1,
+connectedness_res       : 0.1,
+distance_threshold      : 0.0,
 
 }

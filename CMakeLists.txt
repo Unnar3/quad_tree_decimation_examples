@@ -40,6 +40,9 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+add_executable(qtde_datasetMesh src/datasetMesh.cpp)
+target_link_libraries(qtde_datasetMesh ${catkin_LIBRARIES} ${QT_LIBRARIES} qtd_quad_tree qtd_quad_tree_pcl compression)
+
 add_executable(qtde_comparison src/planeExtractionComparison.cpp)
 target_link_libraries(qtde_comparison ${catkin_LIBRARIES} ${QT_LIBRARIES} qtd_quad_tree qtd_quad_tree_pcl compression)
 

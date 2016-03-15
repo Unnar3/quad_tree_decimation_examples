@@ -154,7 +154,7 @@ public:
 
         std::cout << "Efficient PPR..................." << std::endl;
         // planeDetection::planeSegmentationEfficientPPR(segment, params, plane_vec, normal_vec, nonPlanar);
-        planeEx.planeSegmentationEfficientPPR(segment, normals, plane_vec_efficient_ppr, normal_vec_efficient_ppr, nonPlanar);
+        planeEx.planeSegmentationEfficient(segment, normals, plane_vec_efficient_ppr, normal_vec_efficient_ppr, nonPlanar);
         // PROJECT TO PLANE
 
         for ( size_t i = 0; i < normal_vec_efficient_ppr.size(); ++i ){
