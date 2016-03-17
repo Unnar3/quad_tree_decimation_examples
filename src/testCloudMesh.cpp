@@ -108,13 +108,11 @@ public:
         std::vector<pcl::ModelCoefficients::Ptr> normal_vec;
 
         std::cout << "Efficient PPR..................." << std::endl;
-        // planeDetection::planeSegmentationEfficientPPR(segment, params, plane_vec, normal_vec, nonPlanar);
         planeEx.planeSegmentationEfficientPPR(segment, normals, plane_vec, normal_vec, nonPlanar);
         // PROJECT TO PLANE
 
-        for ( size_t i = 0; i < normal_vec.size(); ++i ){
-            EXX::compression::projectToPlaneS( plane_vec[i], normal_vec[i] );
-        }
+        planeEx.projectToPlane<PointT>(plane_vec, normal_vec);
+
 
         EXX::compression cmprs;
         cmprs.setRWHullMaxDist(0.02);
