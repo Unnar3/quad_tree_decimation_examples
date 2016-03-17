@@ -17,7 +17,6 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 rosbuild_prepare_qt4(QtCore QtXml)
-#find_package(CGAL REQUIRED COMPONENTS Core)
 
 #add_message_files(FILES
 #)
@@ -41,16 +40,16 @@ include_directories(
 )
 
 add_executable(qtde_insertSegments src/insertSegmentTest.cpp)
-target_link_libraries(qtde_insertSegments ${catkin_LIBRARIES} qtd_quad_tree qtd_quad_tree_pcl)
+target_link_libraries(qtde_insertSegments ${catkin_LIBRARIES})
 
 add_executable(qtde_datasetMesh src/datasetMesh.cpp)
-target_link_libraries(qtde_datasetMesh ${catkin_LIBRARIES} ${QT_LIBRARIES} qtd_quad_tree qtd_quad_tree_pcl compression)
+target_link_libraries(qtde_datasetMesh ${catkin_LIBRARIES} ${QT_LIBRARIES} compression)
 
 add_executable(qtde_comparison src/planeExtractionComparison.cpp)
-target_link_libraries(qtde_comparison ${catkin_LIBRARIES} ${QT_LIBRARIES} qtd_quad_tree qtd_quad_tree_pcl compression)
+target_link_libraries(qtde_comparison ${catkin_LIBRARIES} ${QT_LIBRARIES} compression)
 
 add_executable(qtde_test_cloud_mesh src/testCloudMesh.cpp)
-target_link_libraries(qtde_test_cloud_mesh ${catkin_LIBRARIES} ${QT_LIBRARIES} qtd_quad_tree qtd_quad_tree_pcl compression qtd_utils)
+target_link_libraries(qtde_test_cloud_mesh ${catkin_LIBRARIES} ${QT_LIBRARIES} compression)
 
 add_executable(qtde_createTestCloud src/createTestCloud.cpp)
 target_link_libraries(qtde_createTestCloud ${catkin_LIBRARIES})

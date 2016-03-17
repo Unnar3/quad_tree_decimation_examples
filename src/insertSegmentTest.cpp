@@ -58,7 +58,7 @@ public:
         Eigen::Vector3f normal;
         normal << 0,0,1;
         qtpcl.setNormal(normal);
-        qtpcl.insertSegments(cloud);
+        qtpcl.insertBoundary(cloud);
 
         PointCloudC::Ptr cloud_color (new PointCloudC());
         std::vector< pcl::Vertices > vertices;

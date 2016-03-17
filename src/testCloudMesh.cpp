@@ -132,7 +132,7 @@ public:
 
         QTD::objStruct<PointT> object(1);
         for ( size_t i = 0; i < plane_vec.size(); ++i ){
-        // for ( size_t i = 0; i < 2; ++i ){
+        // for ( size_t i = 1; i < 2; ++i ){
 
             QTD::QuadTreePCL<PointT> qtpcl(1,10,0,0);
             // qtpcl.setMaxLevel(10);
@@ -141,7 +141,7 @@ public:
 
             PointCloudT::Ptr out (new PointCloudT());
             std::vector< pcl::Vertices > vertices;
-            qtpcl.insertSegments(hulls[i]);
+            qtpcl.insertBoundary(hulls[i]);
             qtpcl.createMesh<PointT>(out, vertices);
 
             cv::Mat image;
