@@ -129,10 +129,10 @@ public:
 
 
         QTD::objStruct<PointT> object(1);
-        // for ( size_t i = 0; i < plane_vec.size(); ++i ){
         pcl::PointCloud<PointT>::Ptr bound (new pcl::PointCloud<PointT>);
 
-        for ( size_t i = 1; i < 2; ++i ){
+        for ( size_t i = 0; i < plane_vec.size(); ++i ){
+        // for ( size_t i = 1; i < 2; ++i ){
 
             QTD::QuadTreePCL<PointT> qtpcl(1,10,0,0);
             // qtpcl.setMaxLevel(10);
@@ -153,15 +153,15 @@ public:
             object.images.push_back(image);
             object.texture_vertices.push_back(vertex_texture);
             object.coefficients.push_back(normal_vec[i]);
-            qtpcl.createBoundary(bound);
+            // qtpcl.createBoundary(bound);
 
         }
         QTD::saveOBJFile(save_path + "mesh.obj", object, 5);
 
 
 
-        pcl::PCDWriter writer;
-        writer.write(save_path + "bound.pcd", *bound);
+        // pcl::PCDWriter writer;
+        // writer.write(save_path + "bound.pcd", *bound);
 
     }
 
