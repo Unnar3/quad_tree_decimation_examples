@@ -157,9 +157,9 @@ public:
         // PROJECT TO PLANE
 
 
-        for ( size_t i = 0; i < normal_vec.size(); ++i ){
-            EXX::compression::projectToPlaneS( plane_vec[i], normal_vec[i] );
-        }
+        planeEx.projectToPlane<PointT>( plane_vec, normal_vec );
+        planeEx.mergePlanes<PointT>( plane_vec, normal_vec );
+        planeEx.projectToPlane<PointT>( plane_vec, normal_vec );
 
 
         EXX::compression cmprs;
@@ -188,7 +188,7 @@ public:
             PointCloudT::Ptr out (new PointCloudT());
             std::vector< pcl::Vertices > vertices;
             qtpcl.insertBoundary(hulls[i]);
-            qtpcl.createMesh<PointT>(out, vertices);
+            qtpcl.createMeshNew<PointT>(out, vertices);
 
             cv::Mat image;
             std::vector<Eigen::Vector2f> vertex_texture;

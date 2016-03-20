@@ -2,8 +2,8 @@
 
 dataset_path            : /media/unnar/HDD/thesis/Dataset_upload/20140905/,
 # dataset_cloud           : patrol_run_16/WayPoint5/complete_cloud.pcd,
-# dataset_cloud           : patrol_run_16/WayPoint5/surfel_map_lower.pcd,
-dataset_cloud           : patrol_run_17/WayPoint16/surfel_map_lower.pcd,
+dataset_cloud           : patrol_run_16/WayPoint5/surfel_map_lower.pcd,
+# dataset_cloud           : patrol_run_17/WayPoint16/surfel_map_lower.pcd,
 dataset_save            : /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/dataset_mesh/,
 
 # Path to clouds
