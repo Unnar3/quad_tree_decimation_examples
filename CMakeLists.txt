@@ -45,6 +45,9 @@ target_link_libraries(qtde_insertSegments ${catkin_LIBRARIES})
 add_executable(qtde_datasetMesh src/datasetMesh.cpp)
 target_link_libraries(qtde_datasetMesh ${catkin_LIBRARIES} ${QT_LIBRARIES} compression)
 
+add_executable(qtde_fusionMesh src/fusionMesh.cpp)
+target_link_libraries(qtde_fusionMesh ${catkin_LIBRARIES} ${QT_LIBRARIES} compression)
+
 add_executable(qtde_comparison src/planeExtractionComparison.cpp)
 target_link_libraries(qtde_comparison ${catkin_LIBRARIES} ${QT_LIBRARIES} compression)
 

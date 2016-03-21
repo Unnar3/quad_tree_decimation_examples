@@ -1,0 +1,25 @@
+{
+
+dataset_path            : /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/dataset_fusion/,
+dataset_cloud           : w5r16/aligned.pcd,
+
+
+# Compression class params
+VoxelLeafSize           : 0.2, # Cannot be smaller than SVVoxelResolution
+RWHullMaxDist           : 0.05,
+hullAlpha               : 0.07,
+
+
+# dataset Mesh
+disjoinedSet            : 10,
+octree_res              : 1.0,
+normal_neigbourhood     : 0.2,
+inlier_threshold        : 0.05,
+inlier_min              : 250,
+min_shape               : 250,
+angle_threshold         : 0.2,
+add_threshold           : 0.1,
+connectedness_res       : 0.1,
+distance_threshold      : 0.0,
+
+}

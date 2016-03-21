@@ -127,12 +127,3 @@ Ns 1
 illum 2
 map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/dataset_mesh/texture_13.png
 ###
-newmtl material_14
-Ka 0.2 0.2 0.2
-Kd 0.8 0.8 0.8
-Ks 1.0 1.0 1.0
-d 1
-Ns 1
-illum 2
-map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/dataset_mesh/texture_14.png
-###

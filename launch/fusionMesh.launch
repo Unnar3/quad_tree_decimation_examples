@@ -1,0 +1,5 @@
+<launch>
+	<node pkg="quad_tree_decimation_example" type="qtde_fusionMesh" name="qtde_fusionMesh" clear_params="true" output="screen">
+		<rosparam file="$(find quad_tree_decimation_example)/include/parameters/fusionParameters.yaml" command="load"/>
+	</node>
+</launch>
