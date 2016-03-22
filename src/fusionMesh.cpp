@@ -7,6 +7,7 @@
 #include <pcl/kdtree/kdtree_flann.h>
 // #include <exx_compression/planes.h>
 #include <metaroom_xml_parser/simple_xml_parser.h>
+#include <pcl/filters/radius_outlier_removal.h>
 // #include <PointTypes/surfel_type.h>
 // #include <pcl/visualization/pcl_visualizer.h>
 // PCL specific includes
@@ -126,6 +127,17 @@ public:
         planeEx.mergePlanes<PointT>( plane_vec, normal_vec );
         planeEx.projectToPlane<PointT>( plane_vec, normal_vec );
 
+
+        for(auto &plane : plane_vec){
+            pcl::RadiusOutlierRemoval<PointT> outrem;
+            // build the filter
+            outrem.setInputCloud(plane);
+            outrem.setRadiusSearch(0.05);
+            outrem.setMinNeighborsInRadius (15);
+            // apply filter
+            outrem.filter (*plane);
+        }
+
         // EXX::compression cmprs;
         // cmprs.setRWHullMaxDist(0.02);
         // cmprs.setHULLAlpha(0.03);
@@ -187,6 +199,11 @@ public:
                 clouds->at(i).b = (int)(255*i/clouds->size());
             }
             writer.write(save_path + "hulls_" + std::to_string(j) + ".pcd", *clouds);
+            j++;
+        }
+        j = 0;
+        for(auto &clouds : plane_vec){
+            writer.write(save_path + "clouds_" + std::to_string(j) + ".pcd", *clouds);
             j++;
         }
 

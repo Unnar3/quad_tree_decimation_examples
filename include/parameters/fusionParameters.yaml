@@ -13,7 +13,7 @@ hullAlpha               : 0.07,
 # dataset Mesh
 disjoinedSet            : 10,
 octree_res              : 1.0,
-normal_neigbourhood     : 0.2,
+normal_neigbourhood     : 0.05,
 inlier_threshold        : 0.05,
 inlier_min              : 250,
 min_shape               : 250,

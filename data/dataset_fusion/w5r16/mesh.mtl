@@ -271,3 +271,39 @@ Ns 1
 illum 2
 map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/dataset_fusion/w5r16/texture_29.png
 ###
+newmtl material_30
+Ka 0.2 0.2 0.2
+Kd 0.8 0.8 0.8
+Ks 1.0 1.0 1.0
+d 1
+Ns 1
+illum 2
+map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/dataset_fusion/w5r16/texture_30.png
+###
+newmtl material_31
+Ka 0.2 0.2 0.2
+Kd 0.8 0.8 0.8
+Ks 1.0 1.0 1.0
+d 1
+Ns 1
+illum 2
+map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/dataset_fusion/w5r16/texture_31.png
+###
+newmtl material_32
+Ka 0.2 0.2 0.2
+Kd 0.8 0.8 0.8
+Ks 1.0 1.0 1.0
+d 1
+Ns 1
+illum 2
+map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/dataset_fusion/w5r16/texture_32.png
+###
+newmtl material_33
+Ka 0.2 0.2 0.2
+Kd 0.8 0.8 0.8
+Ks 1.0 1.0 1.0
+d 1
+Ns 1
+illum 2
+map_Kd /home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/dataset_fusion/w5r16/texture_33.png
+###

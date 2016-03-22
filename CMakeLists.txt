@@ -42,6 +42,9 @@ include_directories(
 add_executable(qtde_insertSegments src/insertSegmentTest.cpp)
 target_link_libraries(qtde_insertSegments ${catkin_LIBRARIES})
 
+add_executable(qtde_holeCheck src/holeCheck.cpp)
+target_link_libraries(qtde_holeCheck ${catkin_LIBRARIES})
+
 add_executable(qtde_datasetMesh src/datasetMesh.cpp)
 target_link_libraries(qtde_datasetMesh ${catkin_LIBRARIES} ${QT_LIBRARIES} compression)
 
