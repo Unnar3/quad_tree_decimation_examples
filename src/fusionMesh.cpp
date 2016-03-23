@@ -206,24 +206,24 @@ public:
         PointCloudT::Ptr outCloudEfficientPPRnc( new PointCloudT() );
         planeEx.combinePlanes(plane_vec, outCloudEfficientPPRnc, false);
 
-        pcl::PCDWriter writer;
-        int R = 255; int G = 255;
-        int j = 0;
-        for(auto &clouds : hulls){
-            int B = 0;
-            for(int i = 0; i < clouds->size(); i++){
-                clouds->at(i).r = R;
-                clouds->at(i).g = G;
-                clouds->at(i).b = (int)(255*i/clouds->size());
-            }
-            writer.write(save_path + "hulls_" + std::to_string(j) + ".pcd", *clouds);
-            j++;
-        }
-        j = 0;
-        for(auto &clouds : plane_vec){
-            writer.write(save_path + "clouds_" + std::to_string(j) + ".pcd", *clouds);
-            j++;
-        }
+        // pcl::PCDWriter writer;
+        // int R = 255; int G = 255;
+        // int j = 0;
+        // for(auto &clouds : hulls){
+        //     int B = 0;
+        //     for(int i = 0; i < clouds->size(); i++){
+        //         clouds->at(i).r = R;
+        //         clouds->at(i).g = G;
+        //         clouds->at(i).b = (int)(255*i/clouds->size());
+        //     }
+        //     writer.write(save_path + "hulls_" + std::to_string(j) + ".pcd", *clouds);
+        //     j++;
+        // }
+        // j = 0;
+        // for(auto &clouds : plane_vec){
+        //     writer.write(save_path + "clouds_" + std::to_string(j) + ".pcd", *clouds);
+        //     j++;
+        // }
 
 
         PointCloudT::Ptr hullsOut( new PointCloudT() );
