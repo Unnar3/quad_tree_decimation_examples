@@ -129,6 +129,10 @@ public:
 
 
         for(auto &plane : plane_vec){
+            if(plane->size() == 0){
+                std::cout << "dafuck" << std::endl;
+                continue;
+            }
             pcl::RadiusOutlierRemoval<PointT> outrem;
             // build the filter
             outrem.setInputCloud(plane);
@@ -141,6 +145,14 @@ public:
         // EXX::compression cmprs;
         // cmprs.setRWHullMaxDist(0.02);
         // cmprs.setHULLAlpha(0.03);
+
+        // for(int i = 0; i < plane_vec.size(); ++i){
+        //     if(plane_vec[i]->points.size() < 100){
+        //         plane_vec.erase(plane_vec.begin() + i);
+        //         normal_vec.erase(normal_vec.begin() + i);
+        //     }
+        // }
+
 
         std::vector<PointCloudT::Ptr> hulls;
         cmprs.planeToConcaveHull(&plane_vec, &hulls);
@@ -157,30 +169,36 @@ public:
 
         for ( size_t i = 0; i < plane_vec.size(); ++i ){
         // for ( size_t i = 1; i < 2; ++i ){
-
+            std::cout << "hmm1" << std::endl;
             QTD::QuadTreePCL<PointT> qtpcl(1,10,0,0);
             // qtpcl.setMaxLevel(10);
             qtpcl.setMaxWidth(1);
             qtpcl.setNormal(normal_vec[i]);
 
+            std::cout << "hmm2" << std::endl;
             PointCloudT::Ptr out (new PointCloudT());
             std::vector< pcl::Vertices > vertices;
             qtpcl.insertBoundary(hulls[i]);
+            std::cout << "hmm2.5" << std::endl;
             qtpcl.createMeshNew<PointT>(out, vertices);
 
+            std::cout << "hmm3" << std::endl;
             cv::Mat image;
             std::vector<Eigen::Vector2f> vertex_texture;
             qtpcl.createTexture<PointT>(plane_vec[i], out, image, vertex_texture);
+            std::cout << "hmm4" << std::endl;
 
             object.clouds.push_back(out);
             object.polygons.push_back(vertices);
             object.images.push_back(image);
             object.texture_vertices.push_back(vertex_texture);
             object.coefficients.push_back(normal_vec[i]);
+            std::cout << "hmm5" << std::endl;
             // qtpcl.createBoundary(bound);
 
         }
         QTD::saveOBJFile(save_path + "mesh.obj", object, 5);
+        std::cout << "hmm6" << std::endl;
 
         PointCloudT::Ptr outCloudEfficientPPR( new PointCloudT() );
         planeEx.combinePlanes(plane_vec, outCloudEfficientPPR, true);

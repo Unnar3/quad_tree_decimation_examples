@@ -75,8 +75,19 @@ public:
             *out += *b;
             return true;
         }
+        else if( squared_point_distance( a->back(), b->front()) ){
+            *out += *a;
+            *out += *b;
+            return true;
+        }
 
-        else return false;
+        else{
+            std::cout << "segment a: " << a->front() << ", " << a->back() << std::endl;
+            std::cout << "segment b: " << b->front() << ", " << b->back() << std::endl;
+
+
+            return false;
+        }
     }
 
 
@@ -108,16 +119,43 @@ public:
 
                 newBoundary.back()->push_back(boundary->at(i));
 
-                if(tmp_segment->size() != 0){
+                if(squared_point_distance(newBoundary.back()->front(), newBoundary.back()->back())){
+                    newBoundary.back()->push_back(newBoundary.back()->points.front());
+                    if(tmp_segment->size() != 0){
+                        // close it as well
+                        newBoundary.push_back(tmp_segment);
+                        newBoundary.back()->push_back(newBoundary.back()->front());
+                    }
+                }
+
+
+                else if(tmp_segment->size() != 0){
                     std::cout << "ahaa" << std::endl;
                     pcl::PointCloud<PointT>::Ptr tmp_combined (new pcl::PointCloud<PointT>());
+
+
                     if(combineSegments(newBoundary.back(), tmp_segment, tmp_combined, dist)){
                         std::cout << "hihi" << std::endl;
                         *newBoundary.back() = *tmp_combined;
-
+                        return true;
+                    } else {
+                        std::cout << "1" << std::endl;
+                        std::cout << "Strange ASS boundary, can't detect holes, hoping for the best !!!" << std::endl;
+                        newBoundary.resize(1);
+                        *newBoundary[0] = *boundary;
+                        newBoundary.push_back(tmp_segment);
+                        return false;
                     }
                 }
-                newBoundary.back()->push_back(newBoundary.back()->points.front());
+                // Check if this newest segment is a polygon (should be)
+                // else if(squared_point_distance(newBoundary.back()->front(), newBoundary.back()->back())){
+                //     newBoundary.back()->push_back(newBoundary.back()->points.front());
+                // }
+                else {
+                    // remove this segment from the dataset
+                    newBoundary.resize(newBoundary.size()-1);
+                }
+
                 return true;
             }
 
@@ -160,7 +198,14 @@ public:
                                     // have closed boundary
                                     *newBoundary.back() = *tmp_segment;
                                     newBoundary.push_back(pcl::PointCloud<PointT>::Ptr (new pcl::PointCloud<PointT>()));
+                                    tmp_segment->clear();
                                 }
+                            }  else {
+                                std::cout << "2, i: " << i  << std::endl;
+                                std::cout << "Strange ASS boundary, can't detect holes, hoping for the best !!!" << std::endl;
+                                newBoundary.resize(1);
+                                *newBoundary[0] = *boundary;
+                                return false;
                             }
                         }
                     }
@@ -183,9 +228,9 @@ public:
         PointCloudT::Ptr cloud_filtered (new PointCloudT());
 
         pcl::PCDReader reader;
-        reader.read ("/home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/dataset_fusion/w5r16/hulls_11.pcd", *segment);
+        reader.read ("/home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/dataset_fusion/w5r16/hulls_5.pcd", *segment);
 
-        reader.read ("/home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/dataset_fusion/w5r16/clouds_11.pcd", *cloud);
+        reader.read ("/home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/dataset_fusion/w5r16/clouds_5.pcd", *cloud);
 
 
         pcl::RadiusOutlierRemoval<pcl::PointXYZRGB> outrem;
@@ -211,14 +256,18 @@ public:
         pcl::PointCloud<PointT>::Ptr bound (new pcl::PointCloud<PointT>());
         for(int i = 0; i < newBoundary.size(); ++i){
             std::cout << "yeahhhh" << std::endl;
-            if(newBoundary[i]->size() < 20) continue;
+            if(newBoundary[i]->size() < 50) continue;
             int j = 0;
             for(auto &p : newBoundary[i]->points){
                 // std::cout << "hmmmmmm" << std::endl;
                 p.r = R;
-                p.g = 255;
-                p.b = j*255/newBoundary[i]->size();
-                j++;
+                p.g = i*255/newBoundary.size();
+                p.b = i*255/newBoundary.size();
+
+                // p.r = R;
+                // p.g = 255;
+                // p.b = j*255/newBoundary[i]->size();
+                // j++;
             }
             *bound += *newBoundary[i];
         }
@@ -235,8 +284,8 @@ public:
         // }
 
         pcl::PCDWriter writer;
-        writer.write("/home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/holeCheck/holes_11.pcd", *bound);
-        writer.write("/home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/holeCheck/clouds_11.pcd", *cloud);
+        writer.write("/home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/holeCheck/holes_5.pcd", *bound);
+        writer.write("/home/unnar/catkin_ws/src/quad_tree_decimation_examples/data/holeCheck/clouds_5.pcd", *cloud);
 
     }
 
